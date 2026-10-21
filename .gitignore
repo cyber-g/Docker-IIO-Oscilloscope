@@ -1,0 +1,6 @@
+/dist/
+*.sif
+*.tar
+.env
+.env.*
+*.authfile
