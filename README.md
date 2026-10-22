@@ -1,7 +1,7 @@
 # Docker-IIO-Oscilloscope
 This repository builds a Docker image for installing and running the Analog Devices IIO Oscilloscope
 
-The image is also converted into an [Apptainer](https://apptainer.org) SIF file,
+The image (Debian Trixie) is also converted into an [Apptainer](https://apptainer.org) SIF file,
 which can be copied to Linux machines and run without Docker or network pulls.
 
 Versions (git tags, set in the `Dockerfile`): libiio `v0.26`, libad9361-iio `v0.4.0`,

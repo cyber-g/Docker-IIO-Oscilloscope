@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 # Released versions (git tags) known to work together: osc v0.18.1 is built
 # upstream against libiio v0.x ("libiio-v0" branch, latest tag v0.26).
