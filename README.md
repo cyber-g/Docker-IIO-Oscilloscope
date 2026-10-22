@@ -34,8 +34,13 @@ The image download is currently about 385 MB.
 From that same directory, start the application (requires X11 / XWayland):
 
 ```sh
-apptainer run osc.sif /usr/local/bin/osc
+apptainer run osc.sif
 ```
+
+The Docker image sets `/usr/local/bin/osc` as its entrypoint, which Apptainer
+preserves in the SIF runscript. There is no need to specify the executable:
+arguments after `apptainer run osc.sif` are passed directly to `osc`, as in the
+`-u` example below.
 
 Once downloaded, the local SIF file can be reused without pulling the image again.
 Additional commands:
