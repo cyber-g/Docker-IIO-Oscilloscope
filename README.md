@@ -4,8 +4,10 @@ This repository builds a Docker image for installing and running the Analog Devi
 The image (Debian Trixie) is also converted into an [Apptainer](https://apptainer.org) SIF file,
 which can be copied to Linux machines and run without Docker or network pulls.
 
-Versions (git tags, set in the `Dockerfile`): libiio `v0.26`, libad9361-iio `v0.4.0`,
-libad9166-iio `v0.3.0`, iio-oscilloscope `v0.18.1`.
+Uses the libiio v1 stack required by iio-oscilloscope `main` (set in the `Dockerfile`):
+libiio `v1.0.0`, libad9361-iio and libad9166-iio `staging/libiio1-support`,
+iio-oscilloscope `main`. Branches move over time; override with e.g.
+`make all DOCKER_BUILD_FLAGS="--build-arg OSC_VERSION=<tag-or-branch>"`.
 
 ## Build
 

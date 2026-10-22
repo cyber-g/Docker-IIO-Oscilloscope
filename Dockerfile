@@ -1,17 +1,18 @@
 FROM debian:trixie-slim
 
-# Released versions (git tags) known to work together: osc v0.18.1 is built
-# upstream against libiio v0.x ("libiio-v0" branch, latest tag v0.26).
-ARG LIBIIO_VERSION=v0.26
-ARG LIBAD9361_VERSION=v0.4.0
-ARG LIBAD9166_VERSION=v0.3.0
-ARG OSC_VERSION=v0.18.1
+# libiio v1 stack, as required by iio-oscilloscope main since 2025-10-01:
+# https://github.com/analogdevicesinc/iio-oscilloscope/blob/main/README.md
+# Only libiio has a v1 release tag; the others are branch names (moving refs).
+ARG LIBIIO_VERSION=v1.0.0
+ARG LIBAD9361_VERSION=staging/libiio1-support
+ARG LIBAD9166_VERSION=staging/libiio1-support
+ARG OSC_VERSION=main
 
 # Build dependencies, taken from the upstream build files:
 # - libiio (libxml2, libusb, avahi):
-#   https://github.com/analogdevicesinc/libiio/blob/v0.26/README_BUILD.md
+#   https://github.com/analogdevicesinc/libiio/blob/v1.0.0/README_BUILD.md
 # - osc (gtk3, gtkdatabox, fftw3, matio, curl, jansson; libxml2 above):
-#   https://github.com/analogdevicesinc/iio-oscilloscope/blob/v0.18.1/CMakeLists.txt#L113-L124
+#   https://github.com/analogdevicesinc/iio-oscilloscope/blob/main/CMakeLists.txt#L113-L124
 # - libad9361-iio / libad9166-iio: nothing beyond libiio.
 # Runtime libraries come along as dependencies of the -dev packages.
 RUN apt-get update && apt-get install -y --no-install-recommends \
