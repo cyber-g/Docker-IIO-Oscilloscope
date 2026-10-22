@@ -1,0 +1,66 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Docker Hub destination, e.g. drdpham/iio-oscilloscope (repository variable).
+  # If unset, the Makefile's local default is used and publishing is refused.
+  IMAGE: ${{ vars.DOCKERHUB_IMAGE || 'local/iio-oscilloscope' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Apptainer
+        run: |
+          sudo add-apt-repository -y ppa:apptainer/ppa
+          sudo apt-get update
+          sudo apt-get install -y apptainer
+
+      - name: Set tag
+        run: echo "TAG=${GITHUB_SHA::12}" >> "$GITHUB_ENV"
+
+      - name: Build Docker image, convert to SIF, test
+        run: make all
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: osc-${{ env.TAG }}-sif
+          path: |
+            dist/*.sif
+            dist/*.sha256
+          if-no-files-found: error
+
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Publish Docker image and SIF
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          authfile="$RUNNER_TEMP/apptainer-auth.json"
+          trap 'rm -f "$authfile"' EXIT
+          printf '%s' "$DOCKERHUB_TOKEN" | apptainer registry login \
+            --authfile "$authfile" --username "$DOCKERHUB_USERNAME" \
+            --password-stdin oras://registry-1.docker.io
+          make publish-docker
+          make publish-sif APPTAINER_PUSH_FLAGS="--authfile $authfile"
