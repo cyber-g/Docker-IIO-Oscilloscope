@@ -17,8 +17,8 @@ Requires Linux, Docker, Apptainer and Make.
 make all     # docker build -> docker save -> apptainer build -> smoke test
 ```
 
-Output: `dist/osc-dev-amd64.sif` and `dist/osc-dev-amd64.sif.sha256`.
-Variables: `IMAGE`, `TAG`, `ARCH`, e.g. `make all TAG=1.0`.
+Output: `dist/osc-dev-<arch>.sif` and its `.sha256` (`<arch>` = host architecture, e.g. `x86_64`).
+Variables: `IMAGE`, `TAG`, e.g. `make all TAG=1.0`.
 
 ## Run
 
@@ -34,8 +34,8 @@ Copy the `.sif` and `.sha256` files to the target machines (shared drive, rsync,
 USB stick...), then check and run:
 
 ```sh
-sha256sum -c osc-dev-amd64.sif.sha256
-apptainer run osc-dev-amd64.sif
+sha256sum -c osc-dev-x86_64.sif.sha256
+apptainer run osc-dev-x86_64.sif
 ```
 
 ## Publish to Docker Hub
@@ -65,4 +65,4 @@ The GitHub Actions workflow builds and tests every PR, and publishes on `main`
 
 - GUI needs an X11 (or XWayland) display on the host.
 - USB/serial device access depends on the host user's permissions (udev rules).
-- `amd64` only by default; build natively with `ARCH=arm64` for ARM machines.
+- The image targets the build machine's architecture; build on an ARM64 machine for ARM64 targets.
