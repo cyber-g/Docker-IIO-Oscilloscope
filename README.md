@@ -53,8 +53,13 @@ apptainer pull osc.sif oras://registry-1.docker.io/<user>/iio-oscilloscope:1.0-s
 ```
 
 The GitHub Actions workflow builds and tests every PR, and publishes on `main`
-(tags = commit SHA). It needs the repository variable `DOCKERHUB_USERNAME` and the
-secret `DOCKERHUB_TOKEN`.
+(tags = commit SHA). Configure in *Settings → Secrets and variables → Actions*:
+
+| Type | Name | Example |
+|---|---|---|
+| Variable | `DOCKERHUB_IMAGE` | `drdpham/iio-oscilloscope` (destination repository) |
+| Variable | `DOCKERHUB_USERNAME` | `drdpham` (account owning the token) |
+| Secret | `DOCKERHUB_TOKEN` | Docker Hub access token (Read & Write) |
 
 ## Limitations
 

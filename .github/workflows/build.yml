@@ -14,8 +14,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # Falls back to the Makefile's local default (publishing is then refused).
-  IMAGE: ${{ vars.DOCKERHUB_USERNAME || 'local' }}/iio-oscilloscope
+  # Docker Hub destination, e.g. drdpham/iio-oscilloscope (repository variable).
+  # If unset, the Makefile's local default is used and publishing is refused.
+  IMAGE: ${{ vars.DOCKERHUB_IMAGE || 'local/iio-oscilloscope' }}
   ARCH: amd64
 
 jobs:
