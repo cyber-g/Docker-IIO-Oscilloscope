@@ -22,6 +22,24 @@ Variables: `IMAGE`, `TAG`, e.g. `make all TAG=1.0`.
 
 ## Run
 
+On a Linux machine with Apptainer installed, download the image and convert it to a SIF file:
+
+```sh
+apptainer pull osc.sif docker://drdpham/iio-oscilloscope:c05bd325dd48
+```
+
+This command saves `osc.sif` locally in the directory where you run the command.
+The image download is currently about 385 MB.
+
+From that same directory, start the application (requires X11 / XWayland):
+
+```sh
+apptainer run osc.sif /usr/local/bin/osc
+```
+
+Once downloaded, the local SIF file can be reused without pulling the image again.
+Additional commands:
+
 ```sh
 apptainer run osc.sif                     # starts osc (needs X11 / XWayland)
 apptainer run osc.sif -u ip:192.168.2.1   # arguments are passed to osc
