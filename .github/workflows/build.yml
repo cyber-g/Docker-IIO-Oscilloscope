@@ -17,7 +17,6 @@ env:
   # Docker Hub destination, e.g. drdpham/iio-oscilloscope (repository variable).
   # If unset, the Makefile's local default is used and publishing is refused.
   IMAGE: ${{ vars.DOCKERHUB_IMAGE || 'local/iio-oscilloscope' }}
-  ARCH: amd64
 
 jobs:
   build:
@@ -39,7 +38,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: osc-${{ env.TAG }}-${{ env.ARCH }}-sif
+          name: osc-${{ env.TAG }}-sif
           path: |
             dist/*.sif
             dist/*.sha256
