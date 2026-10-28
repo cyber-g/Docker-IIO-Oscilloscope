@@ -28,29 +28,15 @@ apptainer run osc.sif -u ip:192.168.2.1   # arguments are passed to osc
 apptainer exec osc.sif osc-smoke-test     # headless check
 ```
 
-## Distribute
-
-Copy the `.sif` and `.sha256` files to the target machines (shared drive, rsync,
-USB stick...), then check and run:
+## Pull from Docker Hub
 
 ```sh
-sha256sum -c osc-dev-x86_64.sif.sha256
-apptainer run osc-dev-x86_64.sif
+apptainer pull osc.sif docker://drdpham/iio-oscilloscope:c05bd325dd48
 ```
 
-## Publish to Docker Hub
+Note: the tag `c05bd325dd48` is mandatory. (no human friendly tag has been assigned)
 
-```sh
-make all     IMAGE=<user>/iio-oscilloscope TAG=1.0
-make publish IMAGE=<user>/iio-oscilloscope TAG=1.0   # after docker login / apptainer registry login
-```
-
-This pushes the Docker image as `<tag>` and the SIF as `<tag>-sif`. The `-sif` tag is an
-OCI artifact for Apptainer only (not runnable by Docker):
-
-```sh
-apptainer pull osc.sif oras://registry-1.docker.io/<user>/iio-oscilloscope:1.0-sif
-```
+## Docker Hub
 
 The GitHub Actions workflow builds and tests every PR, and publishes on `main`
 (tags = commit SHA). Configure in *Settings → Secrets and variables → Actions*:
@@ -63,6 +49,5 @@ The GitHub Actions workflow builds and tests every PR, and publishes on `main`
 
 ## Limitations
 
-- GUI needs an X11 (or XWayland) display on the host.
 - USB/serial device access depends on the host user's permissions (udev rules).
 - The image targets the build machine's architecture; build on an ARM64 machine for ARM64 targets.
